@@ -1,0 +1,62 @@
+x = c(42.2,42.6,43.3,43.5,43.7,44.1,44.9,45.3,45.7,45.7,45.9,46,46.2,46.2,46.8,46.8,47.1,47.2)
+y = c(44,44,44,45,45,46,46,46,47,48,48,48,47,48,48,49,49,49)
+
+plot(x,y)
+
+mdl = lm(y~x)
+
+mdl
+
+summary(mdl)
+
+ypro = predict(mdl) #recta ajustada
+ypro
+
+mdl$coefficients
+b0 = round(mdl$coefficients[1],2)
+b1 = round(mdl$coefficients[2],2)
+
+install.packages("ggplot2")
+require(ggplot2)
+
+qplot(x,y,
+      main = "grafica regresiòn", ylab = "Velocidad1",
+      xlab = "velocidad2", geom = c("point"),
+      method = "lm") + geom_line(aes(y=ypro), lwd = 1.2, color = 4) +
+  geom_text(x = 46, y = 49, aes(label = paste("y","=",b0,"+",b1,"*","x")))
+
+#-------Ejercicio------------------
+a = c(635,644,711,708,836,820,810,870,856,923,878,937,948)
+b = c(100,93,88,84,77,75,74,63,57,55,47,43,38)
+
+
+mod = lm(b~a)
+ ypr = predict(mod)
+ 
+ qplot(a,b,
+       main = "MRL", geom = c("point"),
+       method = "mod") + geom_line(aes(y=ypr), lwd = 1.2, color = 4)
+summary(mod) 
+
+mod$coefficients
+b0 = round(mod$coefficients[1],2)
+b1 = round(mod$coefficients[2],2)
+
+yi=b0+b1*a
+residuo=b-yi
+sse = sum(residuo^2)
+
+sxx=sum((a-mean(a))^2)
+
+mod$residuals
+sb = .01837
+
+intvp = b1-2.3060*sb
+intvn = b1+2.3060*sb
+
+#Con un alto grado de confianza 
+#se estima que un aumento en y de entre -0.222 y -0.138
+#se asocia con un incremento en x de 1
+
+s2 = (sse/(length(a)-2))
+ds = sqrt(s2)
